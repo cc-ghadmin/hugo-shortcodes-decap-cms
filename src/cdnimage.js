@@ -28,9 +28,7 @@ CMS.registerEditorComponent({
     },
     toBlock: function (obj) {
         let options = "";
-        options += obj.src ? ` src="${obj.src}"` : '';
-        options += obj.alt ? ` alt="${obj.alt}"` : '';
-        options += obj.title ? ` title="${obj.title}"` : '';
+        options += obj.src ? ` ${obj.src}` : '';
         return `{{< cdnimage ${options}>}}`;
     },
     toPreview: ({title, alt, src}, getAsset, fields) => {
