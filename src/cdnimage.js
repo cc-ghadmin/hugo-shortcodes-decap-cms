@@ -1,6 +1,6 @@
 CMS.registerEditorComponent({
-    id: "figure",
-    label: "Figure",
+    id: "cdnimage",
+    label: "cdnimage",
     fields: [{
         name: "title",
         label: "Title",
@@ -14,7 +14,7 @@ CMS.registerEditorComponent({
         label: "Image",
         widget: "image"
     }],
-    pattern: /{{<\s*figure(.*)>}}/,
+    pattern: /{{<\s*cdnimage(.*)>}}/,
     fromBlock: function (input) {
         let output = {alt: "", src: "", title: ""}
         let options = input[1].match(/\w+\s*=\s*"[^"]*"/g);
@@ -31,11 +31,11 @@ CMS.registerEditorComponent({
         options += obj.src ? ` src="${obj.src}"` : '';
         options += obj.alt ? ` alt="${obj.alt}"` : '';
         options += obj.title ? ` title="${obj.title}"` : '';
-        return `{{< figure ${options}>}}`;
+        return `{{< cdnimage ${options}>}}`;
     },
     toPreview: ({title, alt, src}, getAsset, fields) => {
         const imageField = fields?.find(f => f.get('widget') === 'image');
         const imgSrc = getAsset(src, imageField);
-        return `<figure><img src="${imgSrc}" alt="${alt}"><figcaption><h4>${title}</h4></figcaption></figure>`;
+        return `{{< cdnimage ${imgSrc} >}}`;
     },
 });
