@@ -1,3 +1,4 @@
+// cdnimage.js
 CMS.registerEditorComponent({
     id: "cdnimage",
     label: "cdnimage",
@@ -27,9 +28,7 @@ CMS.registerEditorComponent({
         return output;
     },
     toBlock: function (obj) {
-        let options = "";
-        options += obj.src ? ` ${obj.src}` : '';
-        return `{{< cdnimage ${options}>}}`;
+        return `{{< cdnimage ${obj.src}>}}`;
     },
     toPreview: ({title, alt, src}, getAsset, fields) => {
         const imageField = fields?.find(f => f.get('widget') === 'image');
@@ -37,34 +36,49 @@ CMS.registerEditorComponent({
         return `{{< cdnimage ${imgSrc} >}}`;
     },
 });
+// figure.js
 CMS.registerEditorComponent({
     id: "figure",
     label: "Figure",
     fields: [{
-            name: "title",
-            label: "Figure Title",
-            widget: "string"
-        },
-        {
-            name: "src",
-            label: "Figure SRC",
-            widget: "string"
-        },
-    ],
-    pattern: /{{< figure src="([a-zA-Z0-9-_ ]+)" title="([a-zA-Z0-9-_ ]+)" >}}/,
-    fromBlock: function(match) {
-        return {
-            title: match[1],
-            src: match[2],
-        };
+        name: "title",
+        label: "Title",
+        widget: "string",
+    }, {
+        name: "alt",
+        label: "Description",
+        widget: "string"
+    }, {
+        name: "src",
+        label: "Image",
+        widget: "image"
+    }],
+    pattern: /{{<\s*figure(.*)>}}/,
+    fromBlock: function (input) {
+        let output = {alt: "", src: "", title: ""}
+        let options = input[1].match(/\w+\s*=\s*"[^"]*"/g);
+        if (options) {
+            options.forEach((i) => {
+                const keyValue = i.split("=");
+                output = {...output, [keyValue[0]]: keyValue[1].replace(/"/g, '')}
+            });
+        }
+        return output;
     },
-    toBlock: function(obj) {
-        return `{{< figure src="${obj.src}" title="${obj.title}" >}}`;
+    toBlock: function (obj) {
+        let options = "";
+        options += obj.src ? ` src="${obj.src}"` : '';
+        options += obj.alt ? ` alt="${obj.alt}"` : '';
+        options += obj.title ? ` title="${obj.title}"` : '';
+        return `{{< figure ${options}>}}`;
     },
-    toPreview: function(obj) {
-        return `<figure><img src=${obj.src} alt=${obj.title}><figcaption>${obj.title}</figcaption></figure>`;
+    toPreview: ({title, alt, src}, getAsset, fields) => {
+        const imageField = fields?.find(f => f.get('widget') === 'image');
+        const imgSrc = getAsset(src, imageField);
+        return `<figure><p><img src="${imgSrc}" alt="${alt}" title="${title}" class="lightense-target"><em>${title}</em></p></figure>`;
     },
 });
+// gist.js
 CMS.registerEditorComponent({
     id: "gist",
     label: "Gist",
@@ -93,6 +107,7 @@ CMS.registerEditorComponent({
         return `{{< gist ${obj.username} ${obj.gid} >}}`;
     },
 });
+// instagram.js
 CMS.registerEditorComponent({
     id: "instagram",
     label: "Instagram",
@@ -126,6 +141,7 @@ CMS.registerEditorComponent({
         }>}}`;
     },
 });
+// twitter.js
 CMS.registerEditorComponent({
     id: "twitter",
     label: "Twitter",
@@ -147,6 +163,7 @@ CMS.registerEditorComponent({
         return `{{< tweet ${obj.tid} >}}`;
     },
 });
+// vimeo.js
 CMS.registerEditorComponent({
     id: "vimeo",
     label: "Vimeo",
@@ -168,6 +185,7 @@ CMS.registerEditorComponent({
         return `{{< vimeo ${obj.shortcode} >}}`;
     },
 });
+// youtube.js
 CMS.registerEditorComponent({
     id: "youtube",
     label: "Youtube",

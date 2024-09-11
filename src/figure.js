@@ -36,6 +36,6 @@ CMS.registerEditorComponent({
     toPreview: ({title, alt, src}, getAsset, fields) => {
         const imageField = fields?.find(f => f.get('widget') === 'image');
         const imgSrc = getAsset(src, imageField);
-        return `<figure><img src="${imgSrc}" alt="${alt}"><figcaption><h4>${title}</h4></figcaption></figure>`;
+        return `<figure><p><img src="${imgSrc}" alt="${alt}" title="${title}" class="lightense-target"><em>${title}</em></p></figure>`;
     },
 });

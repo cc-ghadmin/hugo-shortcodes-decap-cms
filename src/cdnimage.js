@@ -27,9 +27,7 @@ CMS.registerEditorComponent({
         return output;
     },
     toBlock: function (obj) {
-        let options = "";
-        options += obj.src ? ` ${obj.src}` : '';
-        return `{{< cdnimage ${options}>}}`;
+        return `{{< cdnimage ${obj.src}>}}`;
     },
     toPreview: ({title, alt, src}, getAsset, fields) => {
         const imageField = fields?.find(f => f.get('widget') === 'image');
